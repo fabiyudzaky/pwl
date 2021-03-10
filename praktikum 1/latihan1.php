@@ -2,6 +2,7 @@
     $hasil = 0;
     $bil1 = 0;
     $bil2 = 0;
+    $operator = null;
 
     if(isset($_POST['operator'])){
         $operator = $_POST['operator'];
