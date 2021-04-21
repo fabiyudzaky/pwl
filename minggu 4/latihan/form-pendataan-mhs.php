@@ -1,7 +1,18 @@
 <?php
+
+    function hitung_nilai($persentase, $data){
+        return $persentase / 100 * $data;
+    }
+    
+    $catatan_khusus = array();
+    $catatan_khusus[] = "Kehadiran >= 70 %";
+    $catatan_khusus[] = "Interaktif di kelas";
+    $catatan_khusus[] = "Tidak terlambat mengumpulkan tugas";
+
     $nilai_tugas    = 0;
     $nilai_uts      = 0;
     $nilai_uas      = 0;
+
     if(isset($_POST['simpan'])){
         if(isset($_POST['nim'])){
             $nim    = $_POST['nim'];
@@ -16,19 +27,39 @@
         }
         
         if($_POST['tugas'] != 0){
-            $tugas  = $_POST['tugas'];
-            $nilai_tugas    = 40 / 100 * $tugas;
+            $tugas          = $_POST['tugas'];
+            $nilai_tugas    = hitung_nilai(40, $tugas);
         }
         
         if($_POST['uts'] != 0){
-            $uts    = $_POST['uts'];
-            $nilai_uts      = 30 / 100 * $uts;
+            $uts            = $_POST['uts'];
+            $nilai_uts      = hitung_nilai(30, $uts);
         }
 
         if($_POST['uas'] != 0){
-            $uas    = $_POST['uas'];
-            $nilai_uas      = 30 / 100 * $uas;
+            $uas            = $_POST['uas'];
+            $nilai_uas      = hitung_nilai(30, $uas);
         }
+    }
+    $nilai_akhir    = $nilai_tugas + $nilai_uts + $nilai_uas;
+
+    if($nilai_akhir >= 85){
+        $huruf = "A";
+    }
+    elseif($nilai_akhir >= 70 && $nilai_akhir <= 84){
+        $huruf = "B";
+    }
+    elseif($nilai_akhir >= 60 && $nilai_akhir <= 69){
+        $huruf = "C";
+    }
+    elseif($nilai_akhir >= 50 && $nilai_akhir <= 59){
+        $huruf = "D";
+    }
+    elseif($nilai_akhir < 50){
+        $huruf = "E";
+    }
+    else{
+        $huruf  = "-";
     }
 ?>
 <html>
@@ -67,9 +98,14 @@
                 <tr>
                     <td>Catatan Khusus</td>
                     <td>
-                        <input type="checkbox" name="catatan1" id="catatan1" value="Kehadiran >= 70 %">Kehadiran >= 70 % <br>
-                        <input type="checkbox" name="catatan2" id="catatan2" value="Interaktif dikelas">Interaktif dikelas <br>
-                        <input type="checkbox" name="catatan3" id="catatan3" value="Tidak terlambat mengumpulkan tugas">Tidak terlambat mengumpulkan tugas
+                        <?php
+                            foreach($catatan_khusus as $key => $value){
+                                $key += 1;
+                        ?>
+                            <input type="checkbox" name="catatan<?php echo $key; ?>" id="catatan<?php echo $key; ?>" value="<?php echo $value; ?>"><?php echo $value; ?> <br>
+                        <?php
+                            }
+                        ?>
                     </td>
                 </tr>
                 <tr>
@@ -92,17 +128,17 @@
                 <tr>
                     <td style="border:1px solid black;">
                         <?php
-                            if(isset($prodi))
-                                echo $prodi;
-                            else
-                                echo "-";
+                            if(isset($nim))
+                                echo $nim;
+                            else echo "-";
                         ?>
                     </td>
                     <td style="border:1px solid black;">
                         <?php
-                            if(isset($nim))
-                                echo $nim;
-                            else echo "-";
+                            if(isset($prodi))
+                                echo $prodi;
+                            else
+                                echo "-";
                         ?>
                     </td>
                     <td style="border:1px solid black;">
